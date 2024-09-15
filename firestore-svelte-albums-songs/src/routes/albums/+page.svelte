@@ -6,6 +6,7 @@
 		collection,
 		deleteDoc,
 		deleteField,
+		and,
 		query,
 		updateDoc,
 		where
@@ -18,7 +19,7 @@
 	// const data = collectionStore(firestore, 'albums');
 	const albumCollection = collection(firestore, 'albums');
 
-	$: q = query(albumCollection, where('name', '==', keywords));
+	$: q = query(albumCollection, and(where('name', '>=', keywords), where('name', '<=', keywords + '\uf8ff')));
 	$: data = collectionStore(firestore, q);
 
 	const addAlbum = async () => {
