@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { addDoc, collection } from 'firebase/firestore';
+	import { addDoc, collection, deleteDoc } from 'firebase/firestore';
 	import { getFirebaseContext, collectionStore } from 'sveltefire';
 	const { auth, firestore, storage, rtdb, analytics } = getFirebaseContext();
 
@@ -13,6 +13,11 @@
 			date: new Date()
 		});
 	};
+
+	const deleteAlbum = async (album) => {
+		console.log(album);
+		deleteDoc(album.ref);
+	};
 </script>
 
 {#each $data as album}
@@ -20,6 +25,8 @@
 	<p>{album.desc}</p>
 	<p>{album.date}</p>
 	<p>{new Date(album.date.seconds * 1000)}</p>
+
+	<button on:click={() => deleteAlbum(album)}>Delete Album</button>
 {/each}
 
 <button on:click={addAlbum}>Add Album</button>
