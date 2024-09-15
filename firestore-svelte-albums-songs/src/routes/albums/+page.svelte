@@ -13,12 +13,13 @@
 	import { getFirebaseContext, collectionStore } from 'sveltefire';
 	const { auth, firestore, storage, rtdb, analytics } = getFirebaseContext();
 
-	let keywords = 'first album';
+	let inputText = '';
+	let keywords = '';
 	// const data = collectionStore(firestore, 'albums');
 	const albumCollection = collection(firestore, 'albums');
 
-	const q = query(albumCollection, where('name', '==', keywords));
-	const data = collectionStore(firestore, q);
+	$: q = query(albumCollection, where('name', '==', keywords));
+	$: data = collectionStore(firestore, q);
 
 	const addAlbum = async () => {
 		await addDoc(albumCollection, {
@@ -56,6 +57,10 @@
 			songs: arrayRemove(song)
 		});
 	};
+
+	const onSearch = async () => {
+		keywords = inputText;
+	};
 </script>
 
 {#each $data as album}
@@ -80,3 +85,7 @@
 {/each}
 
 <button on:click={addAlbum}>Add Album</button>
+<search>
+	<input type="text" placeholder="Search" bind:value={inputText} />
+	<button on:click={onSearch}>Search</button>
+</search>
