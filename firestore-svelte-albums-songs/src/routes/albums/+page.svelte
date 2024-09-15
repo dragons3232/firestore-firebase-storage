@@ -6,13 +6,19 @@
 		collection,
 		deleteDoc,
 		deleteField,
-		updateDoc
+		query,
+		updateDoc,
+		where
 	} from 'firebase/firestore';
 	import { getFirebaseContext, collectionStore } from 'sveltefire';
 	const { auth, firestore, storage, rtdb, analytics } = getFirebaseContext();
 
-	const data = collectionStore(firestore, 'albums');
+	let keywords = 'first album';
+	// const data = collectionStore(firestore, 'albums');
 	const albumCollection = collection(firestore, 'albums');
+
+	const q = query(albumCollection, where('name', '==', keywords));
+	const data = collectionStore(firestore, q);
 
 	const addAlbum = async () => {
 		await addDoc(albumCollection, {
