@@ -1,6 +1,7 @@
 <script lang="ts">
 	import {
 		addDoc,
+		arrayRemove,
 		arrayUnion,
 		collection,
 		deleteDoc,
@@ -42,6 +43,13 @@
 			})
 		});
 	};
+
+	const deleteSong = async (album, song) => {
+		console.log({ album, song });
+		updateDoc(album.ref, {
+			songs: arrayRemove(song)
+		});
+	};
 </script>
 
 {#each $data as album}
@@ -53,6 +61,16 @@
 	<button on:click={() => deleteAlbum(album)}>Delete Album</button>
 	<button on:click={() => addSong(album)}>Add song</button>
 	<button on:click={() => deleteAlbumField(album)}>Delete field</button>
+
+	{#if album.songs}
+		<h4>Songs</h4>
+		{#each album.songs as song}
+			<p>{song.name}</p>
+			<p>{song.desc}</p>
+			<p>{song.date}</p>
+			<button on:click={() => deleteSong(album, song)}>Delete Song</button>
+		{/each}
+	{/if}
 {/each}
 
 <button on:click={addAlbum}>Add Album</button>
