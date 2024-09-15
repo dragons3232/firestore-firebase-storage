@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { addDoc, collection, deleteDoc, updateDoc } from 'firebase/firestore';
+	import { addDoc, arrayUnion, collection, deleteDoc, updateDoc } from 'firebase/firestore';
 	import { getFirebaseContext, collectionStore } from 'sveltefire';
 	const { auth, firestore, storage, rtdb, analytics } = getFirebaseContext();
 
@@ -21,13 +21,11 @@
 
 	const addSong = async (album) => {
 		updateDoc(album.ref, {
-			songs: [
-				{
-					name: 'Song' + new Date().getTime(),
-					desc: 'Song Description',
-					date: new Date()
-				}
-			]
+			songs: arrayUnion({
+				name: 'Song' + new Date().getTime(),
+				desc: 'Song Description',
+				date: new Date()
+			})
 		});
 	};
 </script>
